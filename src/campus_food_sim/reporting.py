@@ -32,8 +32,16 @@ METRIC_SPECS = (
     ("avg_waiting_min", "Average pickup waiting time", "minutes"),
     ("avg_turnaround_min", "Average order turnaround", "minutes"),
     ("w90_waiting_min", "90th percentile pickup waiting time", "minutes"),
-    ("avg_dwell_min", "Average ready-to-pickup dwell", "minutes"),
-    ("p_stale_pct", "Stale completed orders", "percent"),
+    (
+        "avg_ready_to_arrival_delay_min",
+        "Average ready-to-arrival delay",
+        "minutes",
+    ),
+    (
+        "p_stale_pct",
+        "Stale orders (ready-to-arrival delay > 10 min)",
+        "percent",
+    ),
     ("kitchen_utilization", "Kitchen utilization", "proportion"),
     ("avg_kitchen_queue", "Average kitchen queue", "orders"),
 )

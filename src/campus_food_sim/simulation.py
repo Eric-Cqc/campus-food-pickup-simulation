@@ -370,7 +370,9 @@ def compute_replication_metrics(
     turnaround = [
         float(record.t_pickup) - record.plan.order_time for record in valid
     ]
-    dwell = [
+    # Preserve the coursework freshness semantics: this is the delay from
+    # ready time to customer arrival, not the full time-to-pickup.
+    ready_to_arrival_delays = [
         max(0.0, float(record.t_arrival) - float(record.t_ready))
         for record in valid
     ]
@@ -388,10 +390,12 @@ def compute_replication_metrics(
         "w90_waiting_min": (
             float(np.percentile(waiting, 90)) if waiting else float("nan")
         ),
-        "avg_dwell_min": _mean(dwell),
+        "avg_ready_to_arrival_delay_min": _mean(ready_to_arrival_delays),
         "p_stale_pct": (
-            100.0 * sum(value > threshold for value in dwell) / len(dwell)
-            if dwell
+            100.0
+            * sum(value > threshold for value in ready_to_arrival_delays)
+            / len(ready_to_arrival_delays)
+            if ready_to_arrival_delays
             else float("nan")
         ),
         "kitchen_utilization": busy_tracker.overlap(data_start, data_end)

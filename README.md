@@ -23,9 +23,11 @@ Simulation time is measured in minutes from 08:00. The first 120 minutes are a w
 | Standard pickup | Triangular (10, 25, 60) seconds |
 | Fast simple pickup | Triangular (5, 15, 30) seconds |
 | Resources | Kitchen capacity 4; pickup capacity 1 |
-| Freshness | Stale when ready-to-pickup dwell exceeds 10 minutes |
+| Freshness | Stale when ready-to-arrival delay exceeds 10 minutes (`t_arrival − t_ready`) |
 
 The exact machine-readable assumptions are in [`configs/portfolio.json`](configs/portfolio.json).
+
+The reported ready-to-arrival delay is the time from food being ready (`t_ready`) to the customer arriving (`t_arrival`); it is not time-to-pickup. Freshness/staleness is based on this delay exceeding 10 minutes.
 
 ## Scenarios
 
@@ -38,8 +40,9 @@ The same random order plan and seed are used for all scenarios within each repli
 ## How to run
 
 ```bash
+python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install -e . --no-deps --no-build-isolation
+python -m pip install -e ".[dev]"
 
 MPLBACKEND=Agg MPLCONFIGDIR=/tmp/mpl campus-food-sim run \
   --config configs/portfolio.json --replications 3 --output-dir /tmp/cfs-smoke
@@ -48,7 +51,9 @@ MPLBACKEND=Agg MPLCONFIGDIR=/tmp/mpl campus-food-sim reproduce \
   --config configs/portfolio.json --replications 50 --output-dir results
 ```
 
-The `run` and `reproduce` subcommands use the same deterministic pipeline; `reproduce` names the intended artifact-regeneration workflow. Each output directory contains replication-level metrics, a 50-replication summary with confidence intervals when run at the default size, a paired-difference table, and two headless PNG figures. The plots are pooled over replications and labelled as pooled.
+The `run` and `reproduce` subcommands use the same deterministic pipeline; `reproduce` names the intended artifact-regeneration workflow. Each output directory contains replication-level metrics, a 50-replication summary with confidence intervals when run at the default size, a paired-difference table, and two headless PNG figures. The plots are pooled over replications and labelled as pooled. Figures regenerate with the environment's installed Matplotlib version, so verification checks their existence rather than byte identity.
+
+In the result CSVs, `avg_ready_to_arrival_delay_min` is the mean ready-to-arrival delay, and `p_stale_pct` is the percentage of completed orders whose ready-to-arrival delay exceeds 10 minutes.
 
 For local checks:
 

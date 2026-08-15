@@ -9,10 +9,12 @@ import hashlib
 from pathlib import Path
 
 
-RESULT_FILES = (
+CSV_FILES = (
     "replications.csv",
     "summary.csv",
     "paired_differences.csv",
+)
+PNG_FILES = (
     "orders_ready_by_hour.png",
     "waiting_time_distribution.png",
 )
@@ -36,7 +38,7 @@ def _seed_keys(path: Path) -> list[tuple[str, str, str]]:
 
 
 def verify(expected: Path, actual: Path) -> None:
-    for filename in RESULT_FILES:
+    for filename in CSV_FILES:
         expected_file = expected / filename
         actual_file = actual / filename
         if not expected_file.is_file():
@@ -45,6 +47,14 @@ def verify(expected: Path, actual: Path) -> None:
             raise AssertionError(f"missing reproduced artifact: {actual_file}")
         if _sha256(expected_file) != _sha256(actual_file):
             raise AssertionError(f"artifact differs: {filename}")
+
+    for filename in PNG_FILES:
+        expected_file = expected / filename
+        actual_file = actual / filename
+        if not expected_file.is_file():
+            raise AssertionError(f"missing expected artifact: {expected_file}")
+        if not actual_file.is_file():
+            raise AssertionError(f"missing reproduced artifact: {actual_file}")
 
     expected_keys = _seed_keys(expected / "replications.csv")
     actual_keys = _seed_keys(actual / "replications.csv")

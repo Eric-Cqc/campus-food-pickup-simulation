@@ -1,4 +1,4 @@
-replication,seed,scenario,orders_generated,completed_orders,censored_orders,completed_in_window,avg_waiting_min,avg_turnaround_min,w90_waiting_min,avg_dwell_min,p_stale_pct,kitchen_utilization,avg_kitchen_queue
+replication,seed,scenario,orders_generated,completed_orders,censored_orders,completed_in_window,avg_waiting_min,avg_turnaround_min,w90_waiting_min,avg_ready_to_arrival_delay_min,p_stale_pct,kitchen_utilization,avg_kitchen_queue
 1,20250815,Baseline,155,154,1,145,0.116075206586,14.0558572671,0.516720592214,7.40738088223,33.1034482759,0.252183627941,0.0417365227371
 1,20250815,Scenario 2,155,154,1,145,0.0579863581793,13.8285558657,0.204296849081,7.40738088223,33.1034482759,0.252183627941,0.0417365227371
 1,20250815,Scenario 3,155,154,1,145,0.125124485964,13.4120401124,0.578875705433,7.40738088223,33.1034482759,0.252183627941,0.0417365227371
