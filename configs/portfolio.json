@@ -1,0 +1,136 @@
+{
+  "project": {
+    "name": "Campus Food Pickup Simulation",
+    "description": "An assumption-driven discrete-event simulation of a hypothetical campus food ordering and pickup system."
+  },
+  "simulation": {
+    "start_minute": 0,
+    "end_minute": 720,
+    "data_start_minute": 120,
+    "data_end_minute": 720,
+    "replications": 50
+  },
+  "random": {
+    "seed_base": 20250815
+  },
+  "arrivals": {
+    "time_unit": "minutes from 08:00",
+    "rate_unit": "orders per hour",
+    "segments": [
+      {
+        "name": "off_peak_morning",
+        "start_minute": 0,
+        "end_minute": 210,
+        "rate_per_hour": 5
+      },
+      {
+        "name": "lunch",
+        "start_minute": 210,
+        "end_minute": 300,
+        "rate_per_hour": 30
+      },
+      {
+        "name": "off_peak_afternoon",
+        "start_minute": 300,
+        "end_minute": 540,
+        "rate_per_hour": 5
+      },
+      {
+        "name": "dinner",
+        "start_minute": 540,
+        "end_minute": 630,
+        "rate_per_hour": 25
+      },
+      {
+        "name": "off_peak_evening",
+        "start_minute": 630,
+        "end_minute": 720,
+        "rate_per_hour": 5
+      }
+    ]
+  },
+  "orders": {
+    "simple_probability": 0.65
+  },
+  "preparation": {
+    "simple": {
+      "distribution": "truncated_lognormal",
+      "mu": 1.047,
+      "sigma": 0.324,
+      "truncation_min": 20
+    },
+    "custom": {
+      "distribution": "truncated_lognormal",
+      "mu": 2.003,
+      "sigma": 0.363,
+      "truncation_min": 30
+    }
+  },
+  "transfer": {
+    "distribution": {
+      "distribution": "triangular",
+      "min": 0.5,
+      "mode": 1.5,
+      "max": 3.0,
+      "unit": "minutes"
+    }
+  },
+  "customer_delay": {
+    "immediate_probability": 0.30,
+    "immediate": {
+      "distribution": "triangular",
+      "min": 0,
+      "mode": 1,
+      "max": 3,
+      "unit": "minutes"
+    },
+    "delayed": {
+      "distribution": "triangular",
+      "min": 3,
+      "mode": 8,
+      "max": 20,
+      "unit": "minutes"
+    }
+  },
+  "pickup": {
+    "standard": {
+      "distribution": "triangular",
+      "min": 10,
+      "mode": 25,
+      "max": 60,
+      "unit": "seconds"
+    },
+    "fast_simple": {
+      "distribution": "triangular",
+      "min": 5,
+      "mode": 15,
+      "max": 30,
+      "unit": "seconds"
+    }
+  },
+  "freshness_threshold_min": 10,
+  "resources": {
+    "kitchen_capacity": 4,
+    "pickup_capacity": 1
+  },
+  "scenarios": [
+    {
+      "name": "Baseline",
+      "transfer_scale": 1.0,
+      "fast_simple_pickup": false,
+      "description": "Standard transfer and pickup service."
+    },
+    {
+      "name": "Scenario 2",
+      "transfer_scale": 1.0,
+      "fast_simple_pickup": true,
+      "description": "Faster pickup for simple orders; pickup capacity remains one."
+    },
+    {
+      "name": "Scenario 3",
+      "transfer_scale": 0.6,
+      "fast_simple_pickup": false,
+      "description": "Transfer-time proxy scaled by 0.6; this is not literal batching."
+    }
+  ]
+}
