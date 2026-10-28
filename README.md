@@ -1,4 +1,6 @@
 # Campus Food Pickup Simulation
+This repo is a course study. Not a product install path — see profile Selected for current work.
+
 
 An assumption-driven discrete-event simulation of a hypothetical campus food ordering and pickup system.
 
